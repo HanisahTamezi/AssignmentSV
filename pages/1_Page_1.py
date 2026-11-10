@@ -128,13 +128,13 @@ st.title("Median Household Income Trends in Selangor")
 st.write(
     "This page examines changes in median household income "
     "across parliamentary constituencies in Selangor "
-    "from 2020 to 2024."
+    "from 2022 to 2024."
 )
 
 st.markdown(
     "**Visualization Objective:** To examine the changes "
     "in median household income across parliamentary "
-    "constituencies in Selangor from 2020 to 2024."
+    "constituencies in Selangor from 2022 to 2024."
 )
 
 st.divider()
