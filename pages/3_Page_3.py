@@ -185,23 +185,28 @@ try:
                 cliponaxis=False
             )
 
-            fig.update_layout(
-                template="plotly_white",
-                title_x=0.5,
-                height=max(600, df_chart["parlimen"].nunique() * 45),
-                bargap=0.25,
-                margin=dict(l=150, r=120, t=100, b=60),
-                xaxis_title="Mean Household Income (RM)",
-                yaxis_title="Parliamentary Constituency",
-                legend_title="Year",
-                hoverlabel=dict(
-                    bgcolor="white",
-                    font_size=12
-                ),
-                xaxis=dict(
-                    showgrid=True,
-                    gridcolor="lightgrey"
-                )
+         fig.update_layout(
+    template="plotly_white",
+    title={
+        "text": "Mean Household Income: 2022 vs 2024",
+        "x": 0.5,
+        "xanchor": "center"
+    },
+    height=max(600, df_chart["parlimen"].nunique() * 45),
+    bargap=0.25,
+    margin=dict(l=150, r=120, t=100, b=60),
+    xaxis_title="Mean Household Income (RM)",
+    yaxis_title="Parliamentary Constituency",
+    legend_title="Year",
+    hoverlabel=dict(
+        bgcolor="white",
+        font_size=12
+    ),
+    xaxis=dict(
+        showgrid=True,
+        gridcolor="lightgrey"
+    )
+)
             )
 
             st.plotly_chart(fig, use_container_width=True)
