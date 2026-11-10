@@ -231,7 +231,7 @@ try:
     # LINE CHART WITH DETAILED DATA POINTS
     # --------------------------------------------------
     st.subheader(
-        "Median Household Income Changes (2020–2024)"
+        "Median Household Income Changes (2022–2024)"
     )
 
     st.write(
