@@ -12,32 +12,46 @@ st.set_page_config(
 # Sidebar
 with st.sidebar:
     st.title("📊 Selangor Dashboard")
-    st.markdown("---")
+    st.caption("Socioeconomic Data Analysis")
+
+    st.divider()
 
     st.subheader("Navigation")
-    st.markdown("""
-    - 🏠 Home
-    - 📈 Page 1: Median Household Income
-    - 🔍 Page 2: Income and Absolute Poverty
-    - 📊 Page 3: Mean Household Income
-    """)
 
-    st.markdown("---")
+    st.page_link(
+        "Home.py",
+        label="Home",
+        icon="🏠"
+    )
 
-    st.subheader("About")
-    st.write("""
-    This dashboard analyses the socioeconomic conditions
-    of parliamentary constituencies in Selangor.
-    """)
+    st.page_link(
+        "pages/1_Page_1.py",
+        label="Median Household Income",
+        icon="📈"
+    )
 
-    st.markdown("---")
+    st.page_link(
+        "pages/2_Page_2.py",
+        label="Income and Absolute Poverty",
+        icon="🔍"
+    )
 
-    st.subheader("Data Information")
+    st.page_link(
+        "pages/3_Page_3.py",
+        label="Mean Household Income",
+        icon="📊"
+    )
+
+    st.divider()
+
+    st.subheader("Dataset Information")
+
     st.write("**Source:** DOSM")
-    st.write("**State:** Selangor")
+    st.write("**Location:** Selangor")
     st.write("**Period:** 2020–2024")
 
-    st.markdown("---")
+    st.divider()
+
     st.caption("Scientific Visualization Assignment")
 
 # Dashboard title
