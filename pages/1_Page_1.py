@@ -308,7 +308,7 @@ try:
         template="plotly_white",
         height=550,
         title={
-            "text": "Yearly Median Household Income",
+            "text": "Yearly Median Household Income (2022-2024)",
             "x": 0.5,
             "xanchor": "center"
         },
