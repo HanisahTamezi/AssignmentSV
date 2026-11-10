@@ -250,7 +250,7 @@ try:
                     trendline_color_override="#E74C3C",
                     title=(
                         "Relationship Between Median Household "
-                        f"Income and Absolute Poverty ({latest_year})"
+                        f"Income and Absolute Poverty in 2024 ({latest_year})"
                     ),
                     labels={
                         "income_median":
