@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -9,6 +8,37 @@ st.set_page_config(
     page_icon="📊",
     layout="wide"
 )
+
+# Sidebar
+with st.sidebar:
+    st.title("📊 Selangor Dashboard")
+    st.markdown("---")
+
+    st.subheader("Navigation")
+    st.markdown("""
+    - 🏠 Home
+    - 📈 Page 1: Median Household Income
+    - 🔍 Page 2: Income and Absolute Poverty
+    - 📊 Page 3: Mean Household Income
+    """)
+
+    st.markdown("---")
+
+    st.subheader("About")
+    st.write("""
+    This dashboard analyses the socioeconomic conditions
+    of parliamentary constituencies in Selangor.
+    """)
+
+    st.markdown("---")
+
+    st.subheader("Data Information")
+    st.write("**Source:** DOSM")
+    st.write("**State:** Selangor")
+    st.write("**Period:** 2020–2024")
+
+    st.markdown("---")
+    st.caption("Scientific Visualization Assignment")
 
 # Dashboard title
 st.header("Selangor Socioeconomic Dashboard", divider="gray")
@@ -69,6 +99,7 @@ try:
 
     if selangor.empty:
         st.warning("No Selangor records found.")
+
     else:
         # KPI Metrics
         latest_year = int(selangor["date"].dt.year.max())
@@ -109,7 +140,7 @@ try:
             use_container_width=True
         )
 
-        # Visualization: Population by Constituency
+        # Population Visualization
         st.subheader("Population Distribution by Constituency")
 
         latest_data = selangor[
@@ -131,7 +162,8 @@ try:
 
         fig.update_layout(
             xaxis_tickangle=-45,
-            showlegend=False
+            showlegend=False,
+            template="plotly_white"
         )
 
         st.plotly_chart(fig, use_container_width=True)
@@ -151,8 +183,7 @@ try:
         """)
 
         st.info(
-            "Navigate to Page 1, Page 2 or Page 3 using the sidebar "
-            "to explore the detailed visualizations."
+            "Use the sidebar navigation to explore Page 1, Page 2 and Page 3."
         )
 
 except Exception as e:
