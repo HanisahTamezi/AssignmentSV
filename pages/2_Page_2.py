@@ -332,38 +332,6 @@ try:
             )
 
             # --------------------------------------------------
-            # CHART INTERPRETATION - BLACK TEXT
-            # --------------------------------------------------
-            st.markdown(
-                """
-                <div style="
-                    background-color: #E8F4FD;
-                    padding: 18px;
-                    border-radius: 10px;
-                    color: black;
-                    border-left: 5px solid #2171B5;
-                ">
-                    <h4 style="color: black;">
-                        How to Interpret the Chart
-                    </h4>
-
-                    <ul style="color: black;">
-                        <li>Each dot represents one parliamentary constituency.</li>
-                        <li>The X-axis represents median household income (RM).</li>
-                        <li>The Y-axis represents the absolute poverty rate (%).</li>
-                        <li>The red trendline shows the overall linear relationship
-                        between median household income and absolute poverty.</li>
-                        <li>A downward trend suggests that constituencies with
-                        higher median income tend to have lower poverty rates.</li>
-                    </ul>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-
-            st.divider()
-
-            # --------------------------------------------------
             # DATASET PREVIEW
             # --------------------------------------------------
             st.subheader("Dataset Preview")
