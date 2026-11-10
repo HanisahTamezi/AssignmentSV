@@ -127,14 +127,13 @@ st.title("Income and Absolute Poverty in Selangor")
 st.write(
     "This visualization examines the relationship between "
     "median household income and absolute poverty rates "
-    "across parliamentary constituencies in Selangor "
-    "for the latest available year."
+    "across parliamentary constituencies in Selangor in 2024."
 )
 
 st.markdown(
     "**Visualization Objective:** To examine the relationship "
     "between median household income and absolute poverty "
-    "rates across parliamentary constituencies in Selangor."
+    "rates across parliamentary constituencies in Selangor in 2024."
 )
 
 st.divider()
@@ -152,14 +151,21 @@ try:
 
     else:
 
-        # Get latest available year
-        latest_year = int(
-            df_selangor["date"].dt.year.max()
-        )
+        # --------------------------------------------------
+        # FILTER DATA FOR 2024
+        # --------------------------------------------------
+        selected_year = 2024
 
         df_latest = df_selangor[
-            df_selangor["date"].dt.year == latest_year
+            df_selangor["date"].dt.year == selected_year
         ].copy()
+
+        if df_latest.empty:
+
+            st.warning(
+                "No Selangor data available for 2024."
+            )
+            st.stop()
 
         # --------------------------------------------------
         # KPI METRICS
@@ -167,8 +173,8 @@ try:
         col1, col2, col3, col4 = st.columns(4)
 
         col1.metric(
-            "Latest Data Year",
-            latest_year,
+            "Data Year",
+            selected_year,
             border=True
         )
 
@@ -248,12 +254,6 @@ try:
                     },
                     trendline="ols",
                     trendline_color_override="#E74C3C",
-                    title={
-        "text": "Relationship Between Median Household Income and Absolute Poverty in 2024",
-        "x": 0.5,
-        "xanchor": "center"
-    }
-                    ),
                     labels={
                         "income_median":
                             "Median Household Income (RM)",
@@ -274,7 +274,6 @@ try:
                         "income_mean": ":,.2f",
                         "poverty_absolute": ":.2f"
                     },
-                    title="Median Income vs Absolute Poverty",
                     labels={
                         "income_median":
                             "Median Household Income (RM)",
@@ -296,10 +295,17 @@ try:
                 selector=dict(mode="markers")
             )
 
-            # Customize chart layout
+            # Customize chart layout and title
             fig.update_layout(
                 template="plotly_white",
-                title_x=0.5,
+                title={
+                    "text": (
+                        "Relationship Between Median Household Income "
+                        "and Absolute Poverty in 2024"
+                    ),
+                    "x": 0.5,
+                    "xanchor": "center"
+                },
                 height=650,
                 showlegend=False,
                 hoverlabel=dict(
@@ -326,13 +332,45 @@ try:
             )
 
             # --------------------------------------------------
+            # CHART INTERPRETATION - BLACK TEXT
+            # --------------------------------------------------
+            st.markdown(
+                """
+                <div style="
+                    background-color: #E8F4FD;
+                    padding: 18px;
+                    border-radius: 10px;
+                    color: black;
+                    border-left: 5px solid #2171B5;
+                ">
+                    <h4 style="color: black;">
+                        How to Interpret the Chart
+                    </h4>
+
+                    <ul style="color: black;">
+                        <li>Each dot represents one parliamentary constituency.</li>
+                        <li>The X-axis represents median household income (RM).</li>
+                        <li>The Y-axis represents the absolute poverty rate (%).</li>
+                        <li>The red trendline shows the overall linear relationship
+                        between median household income and absolute poverty.</li>
+                        <li>A downward trend suggests that constituencies with
+                        higher median income tend to have lower poverty rates.</li>
+                    </ul>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+            st.divider()
+
+            # --------------------------------------------------
             # DATASET PREVIEW
             # --------------------------------------------------
             st.subheader("Dataset Preview")
 
             st.write(
                 "The table shows household income and absolute "
-                "poverty rates for each selected constituency."
+                "poverty rates for each selected constituency in 2024."
             )
 
             preview_data = df_chart[
@@ -367,7 +405,7 @@ try:
 
         st.caption(
             "Source: Department of Statistics Malaysia (DOSM). "
-            f"Latest available year: {latest_year}."
+            "Data year: 2024."
         )
 
 except Exception as e:
