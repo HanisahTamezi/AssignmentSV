@@ -248,9 +248,11 @@ try:
                     },
                     trendline="ols",
                     trendline_color_override="#E74C3C",
-                    title=(
-                        "Relationship Between Median Household "
-                        f"Income and Absolute Poverty in 2024 ({latest_year})"
+                    title={
+        "text": "Relationship Between Median Household Income and Absolute Poverty in 2024",
+        "x": 0.5,
+        "xanchor": "center"
+    }
                     ),
                     labels={
                         "income_median":
