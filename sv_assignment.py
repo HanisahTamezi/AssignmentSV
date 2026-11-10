@@ -1,16 +1,25 @@
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Page configuration
+# ==========================================
+# PAGE CONFIGURATION
+# ==========================================
+
 st.set_page_config(
     page_title="Selangor Socioeconomic Dashboard",
     page_icon="📊",
     layout="wide"
 )
 
-# Sidebar
+
+# ==========================================
+# SIDEBAR NAVIGATION
+# ==========================================
+
 with st.sidebar:
+
     st.title("📊 Selangor Dashboard")
     st.caption("Socioeconomic Data Analysis")
 
@@ -18,12 +27,14 @@ with st.sidebar:
 
     st.subheader("Navigation")
 
+    # Home page
     st.page_link(
-        "Home.py",
+        "sv_assignment.py",
         label="Home",
         icon="🏠"
     )
 
+    # Visualization pages
     st.page_link(
         "pages/1_Page_1.py",
         label="Median Household Income",
@@ -54,32 +65,56 @@ with st.sidebar:
 
     st.caption("Scientific Visualization Assignment")
 
-# Dashboard title
-st.header("Selangor Socioeconomic Dashboard", divider="gray")
+
+# ==========================================
+# DASHBOARD TITLE
+# ==========================================
+
+st.header(
+    "Selangor Socioeconomic Dashboard",
+    divider="gray"
+)
 
 st.markdown("""
 This dashboard explores household income, population and absolute poverty
 across parliamentary constituencies in Selangor using DOSM data from 2020 to 2024.
 """)
 
-# Load datasets
+
+# ==========================================
+# LOAD DATASETS
+# ==========================================
+
 @st.cache_data
 def load_data():
+
     pop_url = "https://storage.dosm.gov.my/population/population_parlimen.parquet"
+
     income_url = "https://storage.dosm.gov.my/hies/hh_income_parlimen.parquet"
+
     poverty_url = "https://storage.dosm.gov.my/hies/hh_poverty_parlimen.parquet"
 
+    # Read datasets
     df_pop = pd.read_parquet(pop_url)
     df_inc = pd.read_parquet(income_url)
     df_pov = pd.read_parquet(poverty_url)
 
+    # Convert date columns
     for frame in (df_pop, df_inc, df_pov):
         frame["date"] = pd.to_datetime(frame["date"])
 
     # Filter years 2020–2024
-    df_pop = df_pop[df_pop["date"].dt.year.between(2020, 2024)]
-    df_inc = df_inc[df_inc["date"].dt.year.between(2020, 2024)]
-    df_pov = df_pov[df_pov["date"].dt.year.between(2020, 2024)]
+    df_pop = df_pop[
+        df_pop["date"].dt.year.between(2020, 2024)
+    ]
+
+    df_inc = df_inc[
+        df_inc["date"].dt.year.between(2020, 2024)
+    ]
+
+    df_pov = df_pov[
+        df_pov["date"].dt.year.between(2020, 2024)
+    ]
 
     # Filter overall population
     df_pop = df_pop[
@@ -88,15 +123,18 @@ def load_data():
         (df_pop["ethnicity"] == "overall")
     ]
 
-    # Merge datasets
+    # Merge population and income datasets
     merged = pd.merge(
-        df_pop, df_inc,
+        df_pop,
+        df_inc,
         on=["date", "state", "parlimen"],
         how="inner"
     )
 
+    # Merge with poverty dataset
     merged = pd.merge(
-        merged, df_pov,
+        merged,
+        df_pov,
         on=["date", "state", "parlimen"],
         how="inner"
     )
@@ -104,19 +142,37 @@ def load_data():
     return merged
 
 
-# Main dashboard
+# ==========================================
+# MAIN DASHBOARD
+# ==========================================
+
 try:
+
+    # Load all datasets
     data = load_data()
 
     # Filter Selangor
-    selangor = data[data["state"] == "Selangor"].copy()
+    selangor = data[
+        data["state"] == "Selangor"
+    ].copy()
 
     if selangor.empty:
+
         st.warning("No Selangor records found.")
 
     else:
-        # KPI Metrics
-        latest_year = int(selangor["date"].dt.year.max())
+
+        # ==================================
+        # KPI METRICS
+        # ==================================
+
+        latest_year = int(
+            selangor["date"].dt.year.max()
+        )
+
+        latest_data = selangor[
+            selangor["date"].dt.year == latest_year
+        ].copy()
 
         col1, col2, col3, col4 = st.columns(4)
 
@@ -134,7 +190,7 @@ try:
 
         col3.metric(
             label="Total Population",
-            value=f"{selangor[selangor['date'].dt.year == latest_year]['population'].sum():,.0f}",
+            value=f"{latest_data['population'].sum():,.0f}",
             border=True
         )
 
@@ -146,23 +202,48 @@ try:
 
         st.divider()
 
-        # Dataset Preview
+
+        # ==================================
+        # DATASET PREVIEW
+        # ==================================
+
         st.subheader("Dataset Preview")
+
+        st.write(
+            "The table below displays the first 10 records "
+            "of the combined Selangor socioeconomic dataset."
+        )
 
         st.dataframe(
             selangor.head(10),
-            use_container_width=True
+            use_container_width=True,
+            hide_index=True
         )
 
-        # Population Visualization
-        st.subheader("Population Distribution by Constituency")
+        st.divider()
 
-        latest_data = selangor[
-            selangor["date"].dt.year == latest_year
-        ]
+
+        # ==================================
+        # POPULATION VISUALIZATION
+        # ==================================
+
+        st.subheader(
+            "Population Distribution by Constituency"
+        )
+
+        st.write(
+            f"Population distribution across parliamentary "
+            f"constituencies in Selangor for {latest_year}."
+        )
+
+        # Sort population in descending order
+        population_data = latest_data.sort_values(
+            by="population",
+            ascending=False
+        )
 
         fig = px.bar(
-            latest_data,
+            population_data,
             x="parlimen",
             y="population",
             title=f"Population by Parliamentary Constituency ({latest_year})",
@@ -171,35 +252,68 @@ try:
             labels={
                 "parlimen": "Parliamentary Constituency",
                 "population": "Population"
+            },
+            hover_data={
+                "parlimen": True,
+                "population": ":,.0f"
             }
         )
 
         fig.update_layout(
             xaxis_tickangle=-45,
             showlegend=False,
-            template="plotly_white"
+            template="plotly_white",
+            xaxis_title="Parliamentary Constituency",
+            yaxis_title="Total Population"
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
 
-        # Dataset Information
+        st.divider()
+
+
+        # ==================================
+        # ABOUT THE DATASET
+        # ==================================
+
         st.subheader("About the Dataset")
 
-        st.write("""
-        The dashboard combines three datasets from the Department of Statistics
-        Malaysia (DOSM):
+        st.markdown("""
+        The dashboard combines three datasets from the
+        **Department of Statistics Malaysia (DOSM)**:
 
-        - Population by Parliamentary Constituency
-        - Household Income by Parliamentary Constituency
-        - Household Poverty by Parliamentary Constituency
+        1. **Population by Parliamentary Constituency**
+           - Provides population information for each constituency.
 
-        The analysis focuses on Selangor from 2020 to 2024.
+        2. **Household Income by Parliamentary Constituency**
+           - Provides household income statistics, including mean and median income.
+
+        3. **Household Poverty by Parliamentary Constituency**
+           - Provides information on absolute poverty across constituencies.
         """)
 
         st.info(
-            "Use the sidebar navigation to explore Page 1, Page 2 and Page 3."
+            "Use the sidebar navigation to explore the three "
+            "visualization pages."
         )
 
+        st.caption(
+            "Data Source: Department of Statistics Malaysia (DOSM) | 2020–2024"
+        )
+
+
+# ==========================================
+# ERROR HANDLING
+# ==========================================
+
 except Exception as e:
-    st.error("The data could not be loaded. Please check your internet connection.")
+
+    st.error(
+        "The data could not be loaded. "
+        "Please check your internet connection and dataset availability."
+    )
+
     st.exception(e)
