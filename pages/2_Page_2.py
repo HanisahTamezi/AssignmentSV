@@ -160,18 +160,18 @@ try:
             marker=dict(
                 size=12,
                 opacity=0.8,
-                line=dict(width=1, color="white")
+                line=dict(width=1, color="black")
             ),
             selector=dict(mode="markers")
         )
 
         fig.update_layout(
-            template="plotly_white",
+            template="plotly_grey",
             title_x=0.5,
             height=650,
             showlegend=False,
             hoverlabel=dict(
-                bgcolor="white",
+                bgcolor="grey",
                 font_size=12
             ),
             xaxis=dict(
