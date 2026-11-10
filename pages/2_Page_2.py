@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -230,9 +231,8 @@ try:
 
             st.write(
                 "Each point represents a parliamentary "
-                "constituency. Explore the relationship between "
-                "household income and poverty by hovering "
-                "over the data points."
+                "constituency. Hover over the data points "
+                "to explore household income and poverty information."
             )
 
             if len(df_chart) >= 2:
@@ -273,9 +273,7 @@ try:
                         "income_mean": ":,.2f",
                         "poverty_absolute": ":.2f"
                     },
-                    title=(
-                        "Median Income vs Absolute Poverty"
-                    ),
+                    title="Median Income vs Absolute Poverty",
                     labels={
                         "income_median":
                             "Median Household Income (RM)",
@@ -305,7 +303,8 @@ try:
                 showlegend=False,
                 hoverlabel=dict(
                     bgcolor="white",
-                    font_size=12
+                    font_size=12,
+                    font_color="black"
                 ),
                 xaxis=dict(
                     title="Median Household Income (RM)",
@@ -326,20 +325,33 @@ try:
             )
 
             # --------------------------------------------------
-            # CHART INTERPRETATION
+            # CHART INTERPRETATION - BLACK TEXT
             # --------------------------------------------------
-            st.info(
+            st.markdown(
                 """
-                **How to Interpret the Chart**
+                <div style="
+                    background-color: #E8F4FD;
+                    padding: 18px;
+                    border-radius: 10px;
+                    color: black;
+                    border-left: 5px solid #2171B5;
+                ">
+                    <h4 style="color: black;">
+                        How to Interpret the Chart
+                    </h4>
 
-                - Each dot represents one parliamentary constituency.
-                - The X-axis represents median household income (RM).
-                - The Y-axis represents the absolute poverty rate (%).
-                - The red trendline shows the overall linear relationship
-                  between median household income and absolute poverty.
-                - A downward trend suggests that constituencies with
-                  higher median income tend to have lower poverty rates.
-                """
+                    <ul style="color: black;">
+                        <li>Each dot represents one parliamentary constituency.</li>
+                        <li>The X-axis represents median household income (RM).</li>
+                        <li>The Y-axis represents the absolute poverty rate (%).</li>
+                        <li>The red trendline shows the overall linear relationship
+                        between median household income and absolute poverty.</li>
+                        <li>A downward trend suggests that constituencies with
+                        higher median income tend to have lower poverty rates.</li>
+                    </ul>
+                </div>
+                """,
+                unsafe_allow_html=True
             )
 
             st.divider()
